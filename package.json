@@ -1,25 +1,36 @@
 {
   "name": "vulkanos",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Vulkanos Software House - Portfólio e Currículo Pessoal",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/OGustav-o/Vulkanos.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "portfolio",
+    "software-house",
+    "node.js",
+    "express",
+    "sqlite"
+  ],
+  "author": "OGustav-o",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/OGustav-o/Vulkanos/issues"
   },
   "homepage": "https://github.com/OGustav-o/Vulkanos#readme",
   "dependencies": {
     "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

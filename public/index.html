@@ -3,61 +3,124 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Vulkanos Software House - Engenharia de Software de Alta Performance. Portfólio de projetos inovadores em Node.js, Express e SQLite." />
+    <meta name="keywords" content="software house, engenharia de software, node.js, express, sqlite, desenvolvimento web" />
+    <meta name="author" content="Vulkanos Software House" />
+    <meta property="og:title" content="Vulkanos Software House | Code for Innovation" />
+    <meta property="og:description" content="Engenharia de Software de Alta Performance" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#e94560" />
     <title>Vulkanos Software House | Code for Innovation</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
-    <header>
-      <div class="logo-container">
-        <img src="logo.png" alt="Vulkanos Software House Logo" />
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <img src="logo.png" alt="Vulkanos Logo" class="logo-img" />
+          <span>Vulkanos</span>
+        </div>
+        <div class="nav-menu">
+          <a href="#home" class="nav-link active">Início</a>
+          <a href="#portfolio" class="nav-link">Portfólio</a>
+          <a href="#about" class="nav-link">Sobre</a>
+          <a href="#contact" class="nav-link">Contato</a>
+        </div>
       </div>
-      <h1>Vulkanos</h1>
-      <p>Engenharia de Software de Alta Performance</p>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+      <div class="hero-content">
+        <div class="logo-container">
+          <img src="logo.png" alt="Vulkanos Software House Logo" class="hero-logo" />
+        </div>
+        <h1 class="hero-title">Vulkanos</h1>
+        <p class="hero-subtitle">Engenharia de Software de Alta Performance</p>
+        <p class="hero-description">Transformando ideias em soluções tecnológicas inovadoras</p>
+        <div class="hero-cta">
+          <a href="#portfolio" class="btn btn-primary">Ver Portfólio</a>
+          <a href="#contact" class="btn btn-secondary">Entrar em Contato</a>
+        </div>
+      </div>
+      <div class="hero-background"></div>
     </header>
 
-    <main>
-      <h2>Portfólio de Inovação</h2>
-      <div id="projetos">Carregando o poder do código...</div>
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Portfolio Section -->
+      <section id="portfolio" class="portfolio-section">
+        <div class="section-header">
+          <h2>Portfólio de Inovação</h2>
+          <p class="section-subtitle">Projetos que demonstram excelência em engenharia de software</p>
+        </div>
+
+        <div class="loading-spinner" id="loading">
+          <div class="spinner"></div>
+          <p>Carregando projetos...</p>
+        </div>
+
+        <div id="projetos" class="projects-grid"></div>
+
+        <div class="error-message" id="error" style="display: none;">
+          <p>⚠️ Erro ao conectar com o banco de dados. Verifique o servidor.</p>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="about-section">
+        <div class="section-header">
+          <h2>Sobre Vulkanos</h2>
+        </div>
+        <div class="about-content">
+          <div class="about-text">
+            <p>A Vulkanos é uma software house especializada em soluções de alta performance, com foco em tecnologias modernas como Node.js, Express e SQLite.</p>
+            <p>Nosso compromisso é entregar código de qualidade, escalável e mantível, sempre buscando a excelência em cada projeto.</p>
+          </div>
+          <div class="tech-stack">
+            <h3>Stack Tecnológico</h3>
+            <div class="tech-list">
+              <span class="tech-item">Node.js</span>
+              <span class="tech-item">Express.js</span>
+              <span class="tech-item">SQLite</span>
+              <span class="tech-item">JavaScript Vanilla</span>
+              <span class="tech-item">HTML5</span>
+              <span class="tech-item">CSS3</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="contact-section">
+        <div class="section-header">
+          <h2>Entre em Contato</h2>
+          <p class="section-subtitle">Vamos transformar sua ideia em realidade</p>
+        </div>
+        <div class="contact-content">
+          <a href="mailto:contato@vulkanos.dev" class="contact-link">
+            <span class="contact-icon">📧</span>
+            <span>contato@vulkanos.dev</span>
+          </a>
+          <a href="https://github.com/OGustav-o" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <span class="contact-icon">🔗</span>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </section>
     </main>
 
-    <footer>&copy; 2026 Vulkanos Software House. Code for Innovation.</footer>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2026 Vulkanos Software House. Code for Innovation.</p>
+        <p class="footer-text">Desenvolvido com ❤️ em Node.js e Express</p>
+      </div>
+    </footer>
 
-    <script>
-      fetch("/api/projects")
-        .then((resposta) => resposta.json())
-        .then((dados) => {
-          if (dados.length === 0) {
-            document.getElementById("projetos").innerHTML =
-              "<p style='color: var(--text-muted)'>Nenhum projeto cadastrado no banco de dados.</p>";
-            return;
-          }
-
-          const html = dados
-            .map((projeto) => {
-              const tags = projeto.tech
-                .split(",")
-                .map((tag) => `<span class="tech-tag">${tag.trim()}</span>`)
-                .join("");
-
-              return `
-                        <div class="card">
-                            <h3>${projeto.title}</h3>
-                            <p class="desc">${projeto.description || "Descrição não disponível."}</p>
-                            <div class="tech-tags">
-                                ${tags}
-                            </div>
-                        </div>
-                    `;
-            })
-            .join("");
-
-          document.getElementById("projetos").innerHTML = html;
-        })
-        .catch((err) => {
-          document.getElementById("projetos").innerHTML =
-            "<p style='color: var(--vulkanos-orange)'>Erro ao conectar com o banco de dados. Verifique o servidor.</p>";
-          console.error(err);
-        });
-    </script>
+    <script src="app.js"></script>
   </body>
 </html>
