@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vulkanos Software House | Code for Innovation</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo-container">
+        <img src="logo.png" alt="Vulkanos Software House Logo" />
+      </div>
+      <h1>Vulkanos</h1>
+      <p>Engenharia de Software de Alta Performance</p>
+    </header>
+
+    <main>
+      <h2>Portfólio de Inovação</h2>
+      <div id="projetos">Carregando o poder do código...</div>
+    </main>
+
+    <footer>&copy; 2026 Vulkanos Software House. Code for Innovation.</footer>
+
+    <script>
+      fetch("/api/projects")
+        .then((resposta) => resposta.json())
+        .then((dados) => {
+          if (dados.length === 0) {
+            document.getElementById("projetos").innerHTML =
+              "<p style='color: var(--text-muted)'>Nenhum projeto cadastrado no banco de dados.</p>";
+            return;
+          }
+
+          const html = dados
+            .map((projeto) => {
+              const tags = projeto.tech
+                .split(",")
+                .map((tag) => `<span class="tech-tag">${tag.trim()}</span>`)
+                .join("");
+
+              return `
+                        <div class="card">
+                            <h3>${projeto.title}</h3>
+                            <p class="desc">${projeto.description || "Descrição não disponível."}</p>
+                            <div class="tech-tags">
+                                ${tags}
+                            </div>
+                        </div>
+                    `;
+            })
+            .join("");
+
+          document.getElementById("projetos").innerHTML = html;
+        })
+        .catch((err) => {
+          document.getElementById("projetos").innerHTML =
+            "<p style='color: var(--vulkanos-orange)'>Erro ao conectar com o banco de dados. Verifique o servidor.</p>";
+          console.error(err);
+        });
+    </script>
+  </body>
+</html>
