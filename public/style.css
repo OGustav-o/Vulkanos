@@ -137,7 +137,7 @@ a:hover {
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 5px var(--spacing-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,7 +147,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 800;
   background: var(--gradient-text);
   -webkit-background-clip: text;
@@ -156,8 +156,8 @@ a:hover {
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   filter: drop-shadow(0 0 8px rgba(233, 69, 96, 0.4));
 }
 
@@ -231,12 +231,12 @@ a:hover {
 }
 
 .logo-container {
-  margin-bottom: var(--spacing-2xl);
+  /*margin-bottom: var(--spacing-2xl);*/
   animation: float 3s ease-in-out infinite;
 }
 
 .hero-logo {
-  max-width: 200px;
+  max-width: 400px;
   height: auto;
   filter: drop-shadow(0 0 20px rgba(233, 69, 96, 0.5));
 }
