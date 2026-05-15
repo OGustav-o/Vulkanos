@@ -22,13 +22,9 @@
   ],
   "author": "OGustav-o",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/OGustav-o/Vulkanos/issues"
-  },
-  "homepage": "https://github.com/OGustav-o/Vulkanos#readme",
   "dependencies": {
     "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^5.1.7"
   },
   "engines": {
     "node": ">=18.0.0"
