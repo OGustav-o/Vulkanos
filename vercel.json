@@ -6,7 +6,6 @@
   },
   "functions": {
     "api/projects.js": {
-      "runtime": "nodejs24.x",
       "memory": 1024,
       "maxDuration": 10,
       "includeFiles": "portfolio.db"
