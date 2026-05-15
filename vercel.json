@@ -2,16 +2,6 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "functions": {
-    "server.js": {
-      "includeFiles": "portfolio.db",
-      "maxDuration": 10
-    },
-    "api/**/*.js": {
-      "includeFiles": "portfolio.db",
-      "maxDuration": 10
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
