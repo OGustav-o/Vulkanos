@@ -6,7 +6,7 @@
   },
   "functions": {
     "api/projects.js": {
-      "runtime": "nodejs18.x",
+      "runtime": "nodejs24.x",
       "memory": 1024,
       "maxDuration": 10
     }
