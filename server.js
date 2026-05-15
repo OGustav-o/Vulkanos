@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const db = new sqlite3.Database('./portfolio.db');
+const dbPath = path.join(process.cwd(), 'portfolio.db');
+const db = new sqlite3.Database(dbPath);
 
 // Cria a tabela e insere dados falsos se estiver vazia
 db.serialize(() => {
@@ -103,6 +104,8 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
+export default app;
+/*
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════╗
@@ -115,3 +118,4 @@ app.listen(PORT, () => {
 ╚════════════════════════════════════════╝
   `);
 });
+*/
