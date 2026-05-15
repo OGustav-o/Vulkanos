@@ -6,5 +6,4 @@ env.local
 debug.log
 error.log
 .DS_Store
-server.js
 
