@@ -11,6 +11,12 @@
       "includeFiles": "portfolio.db"
     }
   },
+  "builds": [
+    {
+      "src": "public/app.js",
+      "use": "@vercel/node"
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
