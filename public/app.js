@@ -1,286 +1,219 @@
-/**
- * Vulkanos Portfolio App
- * Gerencia carregamento de projetos e interatividade da página
- */
+﻿import { filterProjects, mergeProjects } from "./project-utils.js";
 
-// Configuração da API
-const API_BASE = '/api';
+const state = { projects: [], query: "", category: "Todos" };
+const grid = document.getElementById("projetos");
+const count = document.getElementById("project-count");
+const search = document.getElementById("project-search");
+const filters = document.getElementById("filters");
+const errorPanel = document.getElementById("error");
+const emptyPanel = document.getElementById("empty-state");
+const notice = document.getElementById("project-notice");
+const retry = document.getElementById("retry-projects");
 
-// Estado da aplicação
-const appState = {
-  projects: [],
-  isLoading: true,
-  error: null,
-};
-
-/**
- * Inicializa a aplicação
- */
-document.addEventListener('DOMContentLoaded', () => {
-  initializeApp();
-  setupScrollBehavior();
-  setupSmoothScroll();
-});
-
-/**
- * Inicializa a aplicação
- */
-async function initializeApp() {
-  try {
-    await loadProjects();
-    renderProjects();
-    setupIntersectionObserver();
-  } catch (error) {
-    console.error('Erro ao inicializar aplicação:', error);
-    showError();
-  }
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
 }
 
-/**
- * Carrega projetos da API
- */
-async function loadProjects() {
-  const loadingElement = document.getElementById('loading');
-  const errorElement = document.getElementById('error');
-
-  try {
-    appState.isLoading = true;
-    
-    const response = await fetch(`${API_BASE}/projects`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    appState.projects = Array.isArray(data) ? data : [];
-    appState.error = null;
-
-    if (loadingElement) {
-      loadingElement.style.display = 'none';
-    }
-    if (errorElement) {
-      errorElement.style.display = 'none';
-    }
-  } catch (error) {
-    console.error('Erro ao carregar projetos:', error);
-    appState.error = error.message;
-    appState.projects = [];
-
-    if (loadingElement) {
-      loadingElement.style.display = 'none';
-    }
-    if (errorElement) {
-      errorElement.style.display = 'block';
-    }
-
-    throw error;
-  } finally {
-    appState.isLoading = false;
+function projectCard(project, index) {
+  const card = element("article", "project-card");
+  const top = element("div", "card-top");
+  top.append(
+    element("span", "card-category", project.category),
+    element("span", "card-index", String(index + 1).padStart(2, "0")),
+  );
+  card.append(
+    top,
+    element("h3", "", project.title),
+    element("p", "project-description", project.description),
+  );
+  if (project.tech.length) {
+    const tags = element("ul", "tags");
+    tags.setAttribute("aria-label", "Tecnologias");
+    for (const tech of project.tech) tags.append(element("li", "", tech));
+    card.append(tags);
   }
+  const links = element("div", "card-links");
+  for (const [url, label] of [
+    [project.repository, "Código no GitHub"],
+    [project.demo, "Abrir projeto"],
+  ]) {
+    if (!url) continue;
+    const link = element("a", "", `${label} ↗`);
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute(
+      "aria-label",
+      `${label}: ${project.title} (abre em nova aba)`,
+    );
+    links.append(link);
+  }
+  if (links.childElementCount) card.append(links);
+  return card;
 }
 
-/**
- * Renderiza os projetos na página
- */
 function renderProjects() {
-  const projectsContainer = document.getElementById('projetos');
+  const visible = filterProjects(state.projects, state.query, state.category);
+  grid.replaceChildren(
+    ...visible.map((project) =>
+      projectCard(project, state.projects.indexOf(project)),
+    ),
+  );
+  count.textContent = `${visible.length} de ${state.projects.length} projetos`;
+  emptyPanel.hidden = visible.length > 0 || state.projects.length === 0;
+  for (const button of filters.querySelectorAll("button"))
+    button.setAttribute(
+      "aria-pressed",
+      String(button.textContent === state.category),
+    );
+}
 
-  if (!projectsContainer) {
-    console.error('Container de projetos não encontrado');
-    return;
+function renderFilters() {
+  const categories = [
+    "Todos",
+    ...new Set(state.projects.map((project) => project.category)),
+  ];
+  if (!categories.includes(state.category)) state.category = "Todos";
+  filters.replaceChildren(
+    ...categories.map((category) => {
+      const button = element("button", "filter", category);
+      button.type = "button";
+      button.setAttribute("aria-pressed", String(category === state.category));
+      button.addEventListener("click", () => {
+        state.category = category;
+        renderProjects();
+      });
+      return button;
+    }),
+  );
+}
+
+async function fetchProjects(url, timeout) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error("Catálogo indisponível");
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error("Formato de catálogo inválido");
+    return data;
+  } finally {
+    clearTimeout(timer);
   }
+}
 
-  // Se não há projetos, mostra mensagem
-  if (appState.projects.length === 0) {
-    projectsContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-        <p style="color: var(--text-muted); font-size: 1.1rem;">
-          Nenhum projeto cadastrado no banco de dados.
-        </p>
-      </div>
-    `;
-    return;
+async function loadProjects() {
+  retry.disabled = true;
+  errorPanel.hidden = true;
+  notice.hidden = true;
+  grid.setAttribute("aria-busy", "true");
+  count.textContent = "Carregando projetos…";
+  let local = [];
+  // As duas fontes começam juntas; o catálogo local aparece sem aguardar o banco.
+  const remoteRequest = fetchProjects("/api/projects", 5000).then(
+    (data) => ({ data }),
+    () => ({ data: [], failed: true }),
+  );
+  try {
+    local = await fetchProjects("/projects.json", 5000);
+    state.projects = mergeProjects(local);
+    if (state.projects.length) {
+      renderFilters();
+      renderProjects();
+      document.querySelector(".project-toolbar").hidden = false;
+    }
+  } catch {
+    /* A API ainda pode fornecer o catálogo completo. */
   }
-
-  // Renderiza cada projeto como um card
-  const cardsHTML = appState.projects
-    .map((projeto, index) => createProjectCard(projeto, index))
-    .join('');
-
-  projectsContainer.innerHTML = cardsHTML;
-
-  // Adiciona animação aos cards
-  const cards = projectsContainer.querySelectorAll('.card');
-  cards.forEach((card, index) => {
-    card.style.animationDelay = `${index * 0.1}s`;
-  });
+  const remote = await remoteRequest;
+  state.projects = mergeProjects(local, remote.data);
+  if (state.projects.length) {
+    renderFilters();
+    renderProjects();
+    document.querySelector(".project-toolbar").hidden = false;
+    if (remote.failed) {
+      notice.textContent =
+        "Exibindo o catálogo local. As atualizações online estão temporariamente indisponíveis.";
+      notice.hidden = false;
+    }
+  } else {
+    count.textContent = "Catálogo indisponível";
+    errorPanel.hidden = false;
+    document.querySelector(".project-toolbar").hidden = true;
+    grid.replaceChildren();
+  }
+  grid.setAttribute("aria-busy", "false");
+  retry.disabled = false;
 }
 
-/**
- * Cria um card de projeto
- */
-function createProjectCard(projeto, index) {
-  const { title, tech, description } = projeto;
+search.addEventListener("input", () => {
+  state.query = search.value;
+  renderProjects();
+});
+document.getElementById("clear-filters").addEventListener("click", () => {
+  state.query = "";
+  state.category = "Todos";
+  search.value = "";
+  renderProjects();
+  search.focus();
+});
+retry.addEventListener("click", loadProjects);
 
-  // Processa as tags de tecnologia
-  const tags = (tech || '')
-    .split(',')
-    .map(tag => tag.trim())
-    .filter(tag => tag.length > 0)
-    .map(tag => `<span class="tech-tag">${escapeHtml(tag)}</span>`)
-    .join('');
+const printButton = document.getElementById("print-profile");
+printButton.hidden = false;
+printButton.addEventListener("click", () => window.print());
+window.addEventListener("beforeprint", () => {
+  grid.replaceChildren(...state.projects.map(projectCard));
+});
+window.addEventListener("afterprint", renderProjects);
+document.getElementById("year").textContent = new Date().getFullYear();
 
-  const projectDescription = description || 'Descrição não disponível.';
-
-  return `
-    <div class="card" data-project-id="${index}">
-      <h3>${escapeHtml(title || 'Projeto sem título')}</h3>
-      <p class="desc">${escapeHtml(projectDescription)}</p>
-      <div class="tech-tags">
-        ${tags}
-      </div>
-    </div>
-  `;
+const menuButton = document.querySelector(".menu-toggle");
+const navigation = document.getElementById("main-nav");
+const mobile = window.matchMedia("(max-width: 700px)");
+function setMenu(open) {
+  navigation.hidden = mobile.matches && !open;
+  menuButton.setAttribute("aria-expanded", String(open));
 }
-
-/**
- * Escapa caracteres HTML para evitar XSS
- */
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
+function syncMenu() {
+  menuButton.hidden = !mobile.matches;
+  setMenu(false);
 }
+menuButton.addEventListener("click", () =>
+  setMenu(menuButton.getAttribute("aria-expanded") !== "true"),
+);
+navigation.addEventListener("click", (event) => {
+  if (event.target.closest("a")) setMenu(false);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobile.matches && !navigation.hidden) {
+    setMenu(false);
+    menuButton.focus();
+  }
+});
+mobile.addEventListener("change", syncMenu);
+syncMenu();
 
-/**
- * Configura o comportamento de scroll
- */
-function setupScrollBehavior() {
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  window.addEventListener('scroll', () => {
-    let currentSection = '';
-
-    // Determina qual seção está visível
-    document.querySelectorAll('section').forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-
-      if (window.scrollY >= sectionTop - 200) {
-        currentSection = section.getAttribute('id');
-      }
-    });
-
-    // Atualiza o link ativo na navegação
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${currentSection}`) {
-        link.classList.add('active');
-      }
-    });
-  });
-}
-
-/**
- * Configura scroll suave para links de âncora
- */
-function setupSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
-
-      // Ignora links vazios
-      if (href === '#') return;
-
-      e.preventDefault();
-
-      const target = document.querySelector(href);
-      if (target) {
-        const headerOffset = 80;
-        const elementPosition = target.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
-      }
-    });
-  });
-}
-
-/**
- * Configura Intersection Observer para animações ao entrar na viewport
- */
-function setupIntersectionObserver() {
+if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(
     (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        for (const link of navigation.querySelectorAll("a")) {
+          if (link.hash === `#${entry.target.id}`)
+            link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
         }
-      });
+      }
     },
-    {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px',
-    }
+    { rootMargin: "-15% 0px -55% 0px", threshold: 0 },
   );
-
-  document.querySelectorAll('.card').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-    observer.observe(card);
-  });
+  document
+    .querySelectorAll("main > section")
+    .forEach((section) => observer.observe(section));
 }
 
-/**
- * Mostra mensagem de erro
- */
-function showError() {
-  const errorElement = document.getElementById('error');
-  const loadingElement = document.getElementById('loading');
-  const projectsContainer = document.getElementById('projetos');
-
-  if (loadingElement) {
-    loadingElement.style.display = 'none';
-  }
-
-  if (errorElement) {
-    errorElement.style.display = 'block';
-  }
-
-  if (projectsContainer) {
-    projectsContainer.innerHTML = '';
-  }
-}
-
-/**
- * Função para recarregar projetos (útil para desenvolvimento)
- */
-window.reloadProjects = async function () {
-  console.log('Recarregando projetos...');
-  try {
-    await loadProjects();
-    renderProjects();
-    console.log('Projetos recarregados com sucesso');
-  } catch (error) {
-    console.error('Erro ao recarregar projetos:', error);
-  }
-};
-
-// Expõe o estado da aplicação para debug
-window.appState = appState;
+loadProjects();

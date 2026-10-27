@@ -1,0 +1,84 @@
+{
+  "name": "Gustavo Dos Santos Ferreira Melo",
+  "role": "Desenvolvimento Back-End e Full Stack",
+  "contact": "Itaquaquecetuba, SP | (11) 94834-0020 | gustavo.melo67@outlook.com",
+  "links": "linkedin.com/in/gustavo777 | github.com/OGustav-o",
+  "summary": "Profissional de automação industrial em transição para desenvolvimento Back-End e Full Stack, com experiência em programação de CLPs, IHMs e integração de sistemas. Projetos com C#/.NET, Node.js, APIs REST, bancos de dados e comunicação industrial, conectando aplicações web à coleta e ao tratamento de dados.",
+  "experience": [
+    {
+      "title": "Programador de CLP — CYDAK",
+      "period": "Fev 2024 – Atual | São Bernardo do Campo, SP",
+      "items": [
+        "Desenvolvimento de lógicas de CLPs e interfaces de operação em IHMs.",
+        "Tratamento e organização de dados para dashboards e sistemas supervisórios.",
+        "Comunicação industrial via Profinet, Modbus e MQTT; documentação de processos e versionamento."
+      ]
+    },
+    {
+      "title": "Auxiliar Técnico de Automação — Controller BMS",
+      "period": "Out 2022 – Fev 2024 | São Paulo, SP",
+      "items": [
+        "Manutenção e programação de sistemas automatizados de HVAC, segurança e iluminação.",
+        "Testes, inspeções e coleta de dados operacionais; análise de históricos para avaliação de desempenho e planejamento de manutenção."
+      ]
+    },
+    {
+      "title": "Aprendiz Técnico Mecatrônica — ZELO",
+      "period": "Dez 2019 – Dez 2020 | São Paulo, SP",
+      "items": [
+        "Apoio na manutenção de máquinas e em projetos de retrofit.",
+        "Modificação de programas de CLP e suporte à produção."
+      ]
+    }
+  ],
+  "industrialExperience": [
+    {
+      "title": "Retrofit e adequação à NR-12 — Volkswagen",
+      "description": "Atuação em linha de prensas em São Bernardo do Campo, com 6 prensas Schuler e 8 robôs KUKA. Escopo de software de CLPs Siemens e hardware de segurança e controle de automação."
+    },
+    {
+      "title": "Adequação de rede e cibersegurança — General Motors",
+      "description": "Atuação na adequação de rede e em cibersegurança nas unidades de São Caetano do Sul e São José dos Campos."
+    }
+  ],
+  "education": [
+    "Tecnólogo em Automação Industrial — FATEC Itaquera | 2020 – 2023",
+    "Técnico em Mecatrônica — SENAI Roberto Simonsen | 2018 – 2020"
+  ],
+  "projects": [
+    {
+      "title": "MES Cydak — Telemetria industrial IIoT multimarcas",
+      "description": "C#/.NET 10, Blazor Server, Minimal API REST, Worker Service e SQLite. Coleta paralela de CLPs no Edge, envio ao servidor central e persistência local com reenvio ordenado após falhas de conexão. Integrações Siemens S7, Rockwell, Beckhoff ADS, Modbus TCP e OPC UA; painéis, alarmes e acompanhamento da produção."
+    },
+    {
+      "title": "BIO-T — Controle de Acesso Industrial",
+      "description": "Node.js, Express e SQLite. Integração de leitores faciais com CLPs Siemens e Rockwell, com permissões por célula, ocupação e histórico de acessos em painel web."
+    },
+    {
+      "title": "Vulkanos Academy",
+      "description": "Plataforma de treinamento interno com C#/.NET, Blazor Server, API ASP.NET Core e SQL Server, organizada em uma arquitetura monolítica em camadas."
+    },
+    {
+      "title": "Sarah Beauty Stock",
+      "description": "Controle de estoque de cosméticos com React, Vite, Firebase e Firestore; produtos, movimentações, persistência local e sincronização sob demanda."
+    },
+    {
+      "title": "Automação de relatórios e aplicação web de controle",
+      "description": "Script Python para leitura e tratamento de CSV e exportação para planilhas .xlsm. Aplicação de controle integrando React, APIs REST e Oracle, com autenticação JWT."
+    }
+  ],
+  "skills": [
+    "Linguagens: C#, Python, SQL, JavaScript, HTML/CSS; conhecimentos em C e R.",
+    "Desenvolvimento: .NET, Node.js, Express, React, Blazor, APIs REST; contato com Django, Angular e ecossistema Spring.",
+    "Dados: SQLite, SQL Server/Azure SQL, Oracle, MySQL, Pandas, NumPy e noções de NoSQL e estatística.",
+    "Automação e análise: CLPs, IHMs, Profinet, Modbus, MQTT, Power BI, Power Automate, Power Apps, n8n e Excel avançado com Power Query, tabelas dinâmicas e VBA.",
+    "Ferramentas e práticas: Git/GitHub, Docker, Selenium, Scrum/Kanban; noções de CI/CD, arquitetura de software e integração com ERP."
+  ],
+  "courses": [
+    "2025 | Business Intelligence — FIAP",
+    "2025 | DevOps & Agile Culture — FIAP",
+    "2024 | Big Data & Analytics — FIAP",
+    "2022 | Introduction to Cybersecurity — Cisco Networking Academy"
+  ],
+  "languages": "Inglês básico/intermediário — em evolução"
+}

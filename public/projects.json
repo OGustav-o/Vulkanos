@@ -1,0 +1,41 @@
+[
+  {
+    "title": "BIO-T · Controle de Acesso Industrial",
+    "category": "Indústria",
+    "description": "Controle de acesso por reconhecimento facial integrado a células industriais e CLPs Siemens e Rockwell. Gerenciamento de permissões, ocupação e histórico de acessos em um painel web.",
+    "tech": ["Node.js", "Express", "SQLite", "Siemens", "Rockwell"]
+  },
+  {
+    "title": "Sarah Beauty Stock",
+    "category": "Aplicações web",
+    "description": "Controle pessoal de estoque de cosméticos, com produtos, movimentações e acesso por conta Google. Persistência local e sincronização sob demanda com o Firestore.",
+    "tech": ["React", "Vite", "Firebase", "Firestore"]
+  },
+  {
+    "title": "Vulkanos Academy",
+    "category": "Educação",
+    "description": "Plataforma de aprendizagem para treinamentos internos, construída com interface Blazor Server e API ASP.NET Core em uma arquitetura monolítica em camadas.",
+    "tech": ["C#", ".NET", "Blazor Server", "SQL Server"]
+  },
+  {
+    "title": "MES Cydak",
+    "category": "Indústria",
+    "description": "Telemetria industrial IIoT multimarcas, com coleta paralela de CLPs no Edge, API REST central e interface Blazor Server. Integra Siemens, Rockwell, Beckhoff, Modbus TCP e OPC UA, com painéis, alarmes e produção. Persistência local e reenvio ordenado preservam os lotes quando a conexão falha.",
+    "tech": [
+      "C#",
+      ".NET 10",
+      "Blazor Server",
+      "SQLite",
+      "Worker Service",
+      "OPC UA",
+      "Modbus TCP"
+    ]
+  },
+  {
+    "title": "Vulkanos · Portfólio",
+    "category": "Aplicações web",
+    "description": "Este portfólio: apresentação profissional, catálogo pesquisável de projetos e perfil para impressão. Frontend sem framework, com API opcional integrada ao Turso.",
+    "tech": ["JavaScript", "HTML", "CSS", "Express", "Turso"],
+    "repository": "https://github.com/OGustav-o/Vulkanos"
+  }
+]

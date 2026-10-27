@@ -1,241 +1,98 @@
-# Vulkanos Software House
+﻿# Vulkanos · Gustavo Melo
 
-> Engenharia de Software de Alta Performance - Portfólio e Currículo Pessoal
+Portfólio profissional e apresentação da marca Vulkanos. HTML, CSS e JavaScript sem framework, com Express e integração opcional ao Turso.
 
-![Vulkanos](public/logo.png)
+## Executar
 
-## 🚀 Sobre
+Requer Node.js 18 ou superior e npm.
 
-Vulkanos é uma plataforma moderna de portfólio e currículo pessoal desenvolvida com tecnologias de ponta. Apresenta projetos e habilidades em engenharia de software com um design elegante e responsivo.
-
-**Stack Tecnológico:**
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Backend**: Node.js, Express.js
-- **Database**: SQLite3
-- **Deployment**: Vercel (Serverless)
-
-## ✨ Características
-
-- ✅ Design moderno e responsivo
-- ✅ Interface intuitiva e acessível
-- ✅ Animações suaves e transições elegantes
-- ✅ API RESTful com Express.js
-- ✅ Banco de dados SQLite integrado
-- ✅ Otimizado para Vercel (Serverless)
-- ✅ Performance otimizada
-- ✅ SEO friendly
-
-## 📋 Pré-requisitos
-
-- Node.js 18.x ou superior
-- npm ou yarn
-- Git
-
-## 🛠️ Instalação Local
-
-### 1. Clonar o repositório
-
-```bash
-git clone https://github.com/OGustav-o/Vulkanos.git
-cd Vulkanos
-```
-
-### 2. Instalar dependências
-
-```bash
-npm install
-```
-
-### 3. Executar o servidor de desenvolvimento
-
-```bash
+```sh
+npm ci
 npm run dev
 ```
 
-O servidor estará disponível em `http://localhost:3000`
+Abra http://localhost:3000. No PowerShell, para outra porta:
 
-## 📁 Estrutura do Projeto
-
-```
-Vulkanos/
-├── api/                    # Funções serverless para Vercel
-│   └── projects.js        # Endpoint da API de projetos
-├── public/                # Arquivos estáticos
-│   ├── index.html         # Página principal
-│   ├── style.css          # Estilos CSS
-│   ├── app.js             # JavaScript da aplicação
-│   └── logo.png           # Logo da empresa
-├── server.js              # Servidor Express
-├── portfolio.db           # Banco de dados SQLite
-├── package.json           # Dependências do projeto
-├── vercel.json            # Configuração para Vercel
-├── .vercelignore          # Arquivos ignorados no deploy
-└── README.md              # Este arquivo
+```powershell
+$env:PORT = '3100'
+npm run dev
 ```
 
-## 🗄️ Banco de Dados
+O servidor inicia tanto com `npm run dev` quanto com `npm start`. A exportação do Express permanece disponível para a configuração Vercel existente.
 
-### Estrutura da Tabela `projects`
+## Projetos
 
-```sql
-CREATE TABLE projects (
-  id INTEGER PRIMARY KEY,
-  title TEXT NOT NULL,
-  tech TEXT NOT NULL,
-  description TEXT
-);
-```
+Edite `public/projects.json`. Cada projeto tem este formato:
 
-### Exemplo de Dados
-
-```sql
-INSERT INTO projects (title, tech, description) VALUES (
-  'Sistema de Gestão Industrial',
-  'Node.js, SQLite, Express',
-  'Plataforma robusta para gerenciamento de processos industriais'
-);
-```
-
-## 🔌 API
-
-### Endpoints
-
-#### GET `/api/projects`
-
-Retorna lista de todos os projetos.
-
-**Resposta:**
 ```json
-[
-  {
-    "id": 1,
-    "title": "Sistema de Gestão Industrial",
-    "tech": "Node.js, SQLite, Express",
-    "description": "Plataforma robusta para gerenciamento de processos industriais"
-  }
-]
-```
-
-## 🎨 Customização
-
-### Cores
-
-As cores podem ser customizadas no arquivo `public/style.css` nas variáveis CSS:
-
-```css
-:root {
-  --primary: #e94560;           /* Cor primária (laranja/vermelho) */
-  --secondary: #0f3460;         /* Cor secundária (azul) */
-  --bg-dark: #0a0e27;           /* Fundo escuro */
-  /* ... mais variáveis */
+{
+  "title": "Nome do projeto",
+  "category": "Aplicações web",
+  "description": "Problema e funcionalidades confirmadas do projeto.",
+  "tech": ["JavaScript", "Node.js"],
+  "repository": "https://github.com/usuario/repositorio",
+  "demo": "https://exemplo.com"
 }
 ```
 
-### Projetos
+`repository` e `demo` são opcionais; links sem destino confirmado devem ser omitidos. Apenas URLs HTTP/HTTPS sem credenciais são aceitas. As áreas dos filtros são geradas a partir do catálogo. A busca considera título, descrição e tecnologias, sem diferenciar acentos ou maiúsculas.
 
-Para adicionar novos projetos, insira dados na tabela `projects` do banco de dados:
+O catálogo inclui BIO-T, Sarah Beauty Stock, Vulkanos Academy, MES Cydak e o próprio portfólio. A documentação fornecida pelo proprietário fundamenta o resumo do MES: telemetria IIoT multimarcas, arquitetura Edge-to-Server, C#/.NET 10, Blazor Server, SQLite e reenvio de lotes após falhas de conexão. O projeto recebe o mesmo tratamento visual dos demais.
 
-```javascript
-db.run(
-  "INSERT INTO projects (title, tech, description) VALUES (?, ?, ?)",
-  ['Novo Projeto', 'Tech Stack', 'Descrição do projeto']
-);
+CydakInsta, Petisquinho e Sarahismo foram removidos a pedido do proprietário. A exclusão em `public/project-utils.js` também impede a reintrodução por registros legados do banco remoto, sem apagar registros desse banco.
+
+Outros projetos recentes que não estejam neste inventário devem ser acrescentados após confirmação de nome, escopo e conteúdo autorizado para divulgação. Não há métricas, empregos, formação ou certificações presumidos no perfil.
+
+## Banco remoto opcional
+
+Sem variáveis de ambiente, `/api/projects` retorna o catálogo local. Para consultar também o Turso, configure no ambiente do processo ou no painel Vercel:
+
+```text
+TURSO_DATABASE_URL=libsql://seu-banco.turso.io
+TURSO_AUTH_TOKEN=seu-token
 ```
 
-## 📦 Deploy na Vercel
+O servidor não carrega `.env` automaticamente. Não coloque credenciais no frontend nem no Git. A tabela remota existente pode manter as colunas `id`, `title`, `tech` e `description`; `tech` aceita texto separado por vírgulas. Campos `category`, `repository` e `demo` também são aceitos quando disponíveis.
 
-### 1. Preparar para Deploy
+O catálogo local é combinado com os registros remotos, removendo títulos repetidos (sem diferenciar acentos, maiúsculas e espaços nas extremidades). Em duplicatas, a versão local revisada tem prioridade. Registros exclusivamente remotos continuam visíveis em `Outros projetos` quando não possuem área. Nenhuma tabela ou registro remoto é alterado por esta aplicação.
 
-O projeto já está configurado para Vercel. Certifique-se de que:
-- `vercel.json` está configurado
-- `.vercelignore` está presente
-- `package.json` tem as dependências corretas
+Falhas no banco preservam o catálogo local. Se a API falhar no navegador, o frontend usa `/projects.json`; se ambas as fontes falharem, apresenta um botão para tentar novamente.
 
-### 2. Conectar ao Vercel
+## Perfil e impressão
 
-```bash
-# Instalar Vercel CLI
-npm i -g vercel
+O site oferece download direto do currículo atualizado em `public/downloads/curriculo-gustavo-melo.pdf` e `public/downloads/curriculo-gustavo-melo.docx`. Ambos têm duas páginas e foram preparados com o currículo enviado pelo proprietário, os projetos verificados e a documentação do MES. Experiência e formação no perfil também foram atualizadas com essa fonte. Contatos: `gustavo.melo67@outlook.com`, `(11) 94834-0020` e `https://www.linkedin.com/in/gustavo777/`.
 
-# Deploy
-vercel
-```
+Para editar o conteúdo, altere `docs/curriculo-content.json`. Para regenerar os arquivos no Windows com Microsoft Word instalado, execute `powershell -ExecutionPolicy Bypass -File scripts/generate-resume.ps1`. O script abre sua própria instância invisível do Word e preserva o documento original recebido. Após regenerar, confira as páginas antes de publicar. Datas e nível das competências devem ser mantidos conforme confirmação do proprietário.
 
-### 3. Variáveis de Ambiente
+O botão **Imprimir perfil / Salvar PDF** permanece como alternativa para imprimir a página do portfólio, com todos os projetos, independentemente do filtro ativo. Os downloads do currículo são arquivos próprios e não dependem da impressão do navegador.
 
-Se necessário, configure variáveis de ambiente no painel do Vercel:
+## Estrutura
 
-```
-NODE_ENV=production
-```
+- `public/index.html`: apresentação, perfil, competências e contato.
+- `public/style.css`: identidade visual, layouts responsivos e impressão.
+- `public/app.js`: catálogo, busca, filtros, menu e recuperação de erros.
+- `public/project-utils.js`: normalização, composição do catálogo, busca e URLs.
+- `public/projects.json`: conteúdo versionado dos projetos.
+- `public/downloads/`: currículo PDF e Word disponibilizado no site.
+- `docs/curriculo-content.json`: conteúdo editável do currículo.
+- `scripts/generate-resume.ps1`: geração de DOCX e PDF usando Word no Windows.
+- `lib/projects.js`: leitura local e consulta remota com recuperação de falhas.
+- `api/projects.js`: handler compartilhado por Express e função Vercel.
+- `server.js`: arquivos estáticos e inicialização HTTP local.
+- `tests/projects.test.js`: testes de catálogo, API e integração.
 
-## 🔒 Segurança
+## Verificação
 
-- ✅ Proteção contra XSS (escaping de HTML)
-- ✅ CORS configurado
-- ✅ Headers de segurança
-- ✅ Validação de entrada
-
-## 📊 Performance
-
-- ✅ Minificação de CSS e JavaScript
-- ✅ Cache de assets estáticos
-- ✅ Compressão de imagens
-- ✅ Lazy loading
-- ✅ Otimização de banco de dados
-
-## 🧪 Testes
-
-```bash
-# Executar testes
+```sh
 npm test
+node --check public/app.js
+node --check server.js
 ```
 
-## 🐛 Troubleshooting
+Os testes usam `node:test`, uma porta efêmera e um banco temporário, sem acessar ou modificar o banco remoto real. Incluem deduplicação, dados legados, busca, URLs inseguras, fallback, métodos HTTP e arquivos estáticos. No Windows, a limpeza do banco temporário usa novas tentativas para tolerar bloqueios transitórios de arquivo.
 
-### Erro: "Cannot find module 'sqlite3'"
+A interface respeita movimento reduzido, tem foco visível, link para pular ao conteúdo, filtros com estado acessível e menu mobile com fechamento por Escape. O catálogo exige JavaScript; os demais conteúdos são HTML estático.
 
-```bash
-npm install sqlite3 --build-from-source
-```
+## Publicação
 
-### Erro: "Port 3000 already in use"
-
-```bash
-# Usar porta diferente
-PORT=3001 npm run dev
-```
-
-### Erro ao conectar com API
-
-Verifique se o servidor está rodando e se a URL da API está correta em `public/app.js`.
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📝 Licença
-
-Este projeto está sob a licença ISC. Veja o arquivo LICENSE para mais detalhes.
-
-## 📧 Contato
-
-- **Email**: contato@vulkanos.dev
-- **GitHub**: [@OGustav-o](https://github.com/OGustav-o)
-
-## 🙏 Agradecimentos
-
-- Express.js
-- SQLite3
-- Vercel
-- Comunidade Node.js
-
----
-
-**Desenvolvido com ❤️ em Node.js e Express**
-
-Última atualização: 2026
+A configuração Vercel existente foi preservada. Configure as variáveis do Turso apenas se desejar consultar o banco. Faça a revisão dos textos, contatos e projetos antes de publicar. Esta atualização não executa deploy.

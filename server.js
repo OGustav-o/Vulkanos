@@ -1,51 +1,25 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createClient } from '@libsql/client';
+﻿import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import handler from "./api/projects.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const directory = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+app.disable("x-powered-by");
+app.all("/api/projects", handler);
+app.use(express.static(path.join(directory, "public")));
+app.use((req, res) =>
+  res.status(404).type("text").send("Página não encontrada."),
+);
 
-// Inicialização do Cliente Turso
-const db = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () =>
+    console.log(`Vulkanos disponível em http://localhost:${port}`),
+  );
+}
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Rota para buscar projetos
-app.get('/api/projects', async (req, res) => {
-  // CORS headers para permitir acesso do frontend
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  try {
-    const result = await db.execute('SELECT * FROM projects ORDER BY id DESC');
-    res.json(result.rows || []);
-  } catch (err) {
-    console.error('Erro ao buscar projetos no Turso:', err);
-    res.status(500).json({ error: 'Erro ao buscar projetos' });
-  }
-});
-
-// Rota raiz para o index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Tratamento de 404
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Exportação obrigatória para a Vercel funcionar com Express
 export default app;
