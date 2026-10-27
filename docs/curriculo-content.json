@@ -3,12 +3,14 @@
   "role": "Desenvolvimento Back-End e Full Stack",
   "contact": "Itaquaquecetuba, SP | (11) 94834-0020 | gustavo.melo67@outlook.com",
   "links": "linkedin.com/in/gustavo777 | github.com/OGustav-o",
-  "summary": "Profissional de automação industrial em transição para desenvolvimento Back-End e Full Stack, com experiência em programação de CLPs, IHMs e integração de sistemas. Projetos com C#/.NET, Node.js, APIs REST, bancos de dados e comunicação industrial, conectando aplicações web à coleta e ao tratamento de dados.",
+  "summary": "Profissional de software e automação industrial, atualmente na equipe de desenvolvimento de novos produtos da CYDAK, com atuação em software, soluções de automação e testes e homologação de novos hardwares e periféricos. Experiência em CLPs, IHMs e integração de sistemas, com projetos em C#/.NET, Node.js, APIs REST e bancos de dados.",
   "experience": [
     {
       "title": "Programador de CLP — CYDAK",
       "period": "Fev 2024 – Atual | São Bernardo do Campo, SP",
       "items": [
+        "Atuação atual na equipe de desenvolvimento de novos produtos, com foco em software e soluções de automação industrial.",
+        "Testes e homologação de novos hardwares e periféricos.",
         "Desenvolvimento de lógicas de CLPs e interfaces de operação em IHMs.",
         "Tratamento e organização de dados para dashboards e sistemas supervisórios.",
         "Comunicação industrial via Profinet, Modbus e MQTT; documentação de processos e versionamento."
